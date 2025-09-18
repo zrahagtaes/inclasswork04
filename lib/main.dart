@@ -3,122 +3,291 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyWidget());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.red,
+          title: const Text('Emoji App'),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const EmojiHeader(),
+                const SizedBox(height: 16),
+                EmojiDropdown(),
+              ],
+            ),
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class EmojiHeader extends StatelessWidget {
+  const EmojiHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+    return Container(
+      padding: const EdgeInsets.all(10),
+      color: Colors.yellow[200],
+      child: const Text('Create your own emoji!'),
+    );
+  }
+}
+
+class EmojiDropdown extends StatefulWidget {
+  const EmojiDropdown({super.key});
+
+  @override
+  State<EmojiDropdown> createState() => _EmojiDropdownState();
+}
+
+//emotions dropdown selection
+class _EmojiDropdownState extends State<EmojiDropdown> {
+  final List<String> items = ['Smile', 'Sad', 'In Love'];
+  String selected = 'Smile';
+
+  //adding details for each emotion
+  final Map<String, List<String>> detailOptions = {
+    'Smile': ['Normal', 'Party Hat', 'Sunglasses'],
+    'Sad': ['Normal', 'One Tear', 'Two Tears'],
+    'In Love': ['Normal', 'Blushing'],
+  };
+
+  String detail = 'Normal';
+
+  // keep detail or features if emotion changes
+  void _resetDetailIfNeeded() {
+    final opts = detailOptions[selected]!;
+    if (!opts.contains(detail)) {
+      detail = opts.first;
+    }
+  }
+
+  //makes sure detail matches the selected emotion
+  @override
+  Widget build(BuildContext context) {
+    _resetDetailIfNeeded();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DropdownButton<String>(
+          value: selected,
+          items: items
+              .map((v) => DropdownMenuItem(value: v, child: Text(v)))
+              .toList(),
+          onChanged: (value) {
+            if (value == null) return;
+            setState(() {
+              selected = value;
+              _resetDetailIfNeeded();
+            });
+          },
+        ),
+        Text('Selected: $selected'),
+
+        const SizedBox(height: 12),
+
+        Row(
+          children: [
+            const Text('Details: '),
+            DropdownButton<String>(
+              value: detail,
+              items: detailOptions[selected]!
+                  .map((v) => DropdownMenuItem(value: v, child: Text(v)))
+                  .toList(),
+              onChanged: (v) {
+                if (v == null) return;
+                setState(() => detail = v);
+              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
+        Center(
+          child: CustomPaint(
+            size: const Size(200, 200),
+            painter: EmojiPainter(selected, detail),
+          ),
+        ),
+      ],
     );
   }
+}
+
+class EmojiPainter extends CustomPainter {
+  final String mode; // which emoji style to add
+  final String detail; //which detail to add
+  EmojiPainter(this.mode, this.detail);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final r = size.width * 0.4;
+
+    // draw and color face circle
+    final facePaint = Paint()..color = Colors.yellow;
+    canvas.drawCircle(center, r, facePaint);
+    // draw and color eyes
+    final eyePaint = Paint()..color = Colors.black;
+    final leftEye = Offset(center.dx - 40, center.dy - 30);
+    final rightEye = Offset(center.dx + 40, center.dy - 30);
+    canvas.drawCircle(leftEye, 10, eyePaint);
+    canvas.drawCircle(rightEye, 10, eyePaint);
+
+    // mouth paint
+    final mouthPaint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 6
+      ..style = PaintingStyle.stroke;
+
+    if (mode == 'Smile') {
+      // smile arc
+      final rect = Rect.fromCircle(center: center, radius: 60);
+      canvas.drawArc(rect, 0, 3.14, false, mouthPaint);
+
+      //details for smile option
+      if (detail == 'Party Hat') {
+        _drawPartyHat(canvas, center, r + 5.00);
+      } else if (detail == 'Sunglasses') {
+        _drawSunglasses(canvas, leftEye, rightEye);
+      }
+    } else if (mode == 'Sad') {
+      // frown arc
+
+      final rect = Rect.fromCircle(center: center.translate(0, 40), radius: 60);
+      canvas.drawArc(rect, 3.14, 3.14, false, mouthPaint);
+      //details for sad option
+      if (detail == 'One Tear' || detail == 'Two Tears') {
+        final tear = Paint()..color = Colors.blue;
+        canvas.drawCircle(leftEye + const Offset(0, 22), 10, tear);
+        if (detail == 'Two Tears') {
+          canvas.drawCircle(rightEye + const Offset(0, 22), 10, tear);
+        }
+      }
+    } else if (mode == 'In Love') {
+      // heart eyes
+      final heartPaint = Paint()..color = Colors.red;
+      final leftHeartCenter = Offset(center.dx - 40, center.dy - 20);
+      final rightHeartCenter = Offset(center.dx + 40, center.dy - 20);
+
+      canvas.drawPath(_heartPath(leftHeartCenter, 25), heartPaint);
+      canvas.drawPath(_heartPath(rightHeartCenter, 25), heartPaint);
+      // smiling mouth
+      final rect = Rect.fromCircle(center: center, radius: 60);
+      canvas.drawArc(rect, 0, 3.14, false, mouthPaint);
+
+      //details for in love option
+      if (detail == 'Blushing') {
+        final blush = Paint()..color = Colors.pinkAccent.withOpacity(0.6);
+        canvas.drawCircle(leftEye + const Offset(-16, 25), 12, blush);
+        canvas.drawCircle(rightEye + const Offset(16, 25), 12, blush);
+      }
+    }
+  }
+
+  //helpers
+
+  // smile details, starting off with party hat
+  void _drawPartyHat(Canvas canvas, Offset center, double r) {
+    final hatPath = Path()
+      ..moveTo(center.dx, center.dy - r * 2.00) //top
+      ..lineTo(center.dx - r * 1.00, center.dy - r * 0.50) //bottom left
+      ..lineTo(center.dx + r * 1.00, center.dy - r * 0.50) //bottom right
+      ..close();
+
+    final hatRect = Rect.fromLTWH(
+      center.dx - r, //left
+      center.dy - r * 3.00, //top
+      r * 2, //width
+      r * 1.5, // height
+    );
+
+    final hatPaint = Paint()
+      ..shader = const LinearGradient(
+        colors: [Colors.orange, Colors.pink, Colors.red],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ).createShader(hatRect);
+
+    canvas.drawPath(hatPath, hatPaint);
+
+    // hat pompom :D
+    canvas.drawCircle(
+      Offset(center.dx, center.dy - r * 2.00),
+      r * 0.15,
+      Paint()..color = Colors.white,
+    );
+  }
+
+  void _drawSunglasses(Canvas canvas, Offset leftEye, Offset rightEye) {
+    final lensPaint = Paint()..color = Colors.black;
+    final bridgePaint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 4
+      ..style = PaintingStyle.stroke;
+
+    //draw lenses
+    canvas.drawRect(
+      Rect.fromCenter(center: leftEye, width: 50, height: 36),
+      lensPaint,
+    );
+    canvas.drawRect(
+      Rect.fromCenter(center: rightEye, width: 50, height: 36),
+      lensPaint,
+    );
+
+    //bridge
+    canvas.drawLine(
+      leftEye + const Offset(12, 0),
+      rightEye + const Offset(-13, 0),
+      bridgePaint,
+    );
+  }
+
+  Path _heartPath(Offset c, double s) {
+    final p = Path();
+
+    p.moveTo(c.dx, c.dy + 0.40 * s);
+
+    p.cubicTo(
+      c.dx - 2.50 * s,
+      c.dy - 2.50 * s,
+      c.dx - 0.50 * s,
+      c.dy - 2.00 * s,
+      c.dx,
+      c.dy - 1.00 * s,
+    );
+
+    p.cubicTo(
+      c.dx + 3.00 * s,
+      c.dy - 2.75 * s,
+      c.dx + 1.00 * s,
+      c.dy - 0.10 * s,
+      c.dx,
+      c.dy + 0.40 * s,
+    );
+
+    p.close();
+    return p;
+  }
+
+  @override
+  bool shouldRepaint(covariant EmojiPainter old) =>
+      old.mode != mode || old.detail != detail;
 }
