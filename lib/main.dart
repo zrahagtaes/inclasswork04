@@ -49,6 +49,7 @@ class EmojiHeader extends StatelessWidget {
     );
   }
 }
+// Dropdown widget created for selecting emojis and their details 
 
 class EmojiDropdown extends StatefulWidget {
   const EmojiDropdown({super.key});
