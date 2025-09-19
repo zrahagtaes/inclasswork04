@@ -3,7 +3,18 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyWidget());
+  return MaterialApp(
+  theme: ThemeData(
+    primarySwatch: Colors.red,
+    scaffoldBackgroundColor: Colors.white,
+  ),
+  home: Scaffold(
+    appBar: AppBar(
+      backgroundColor: Colors.red,
+      title: const Text('Emoji App'),
+      centerTitle: true,
+    ),
+
 }
 
 class MyWidget extends StatelessWidget {
