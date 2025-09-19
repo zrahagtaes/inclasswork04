@@ -1,3 +1,4 @@
+// Project: Emoji Drawing App
 // Team Members: Asmat Ullah & Zarah Gates
 
 import 'package:flutter/material.dart';
