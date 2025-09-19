@@ -3,18 +3,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  return MaterialApp(
-  theme: ThemeData(
-    primarySwatch: Colors.red,
-    scaffoldBackgroundColor: Colors.white,
-  ),
-  home: Scaffold(
-    appBar: AppBar(
-      backgroundColor: Colors.red,
-      title: const Text('Emoji App'),
-      centerTitle: true,
-    ),
-
+  runApp(MyWidget());
 }
 
 class MyWidget extends StatelessWidget {
@@ -23,6 +12,10 @@ class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+        scaffoldBackgroundColor: Colors.white,
+      ),
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red,
@@ -37,7 +30,7 @@ class MyWidget extends StatelessWidget {
               children: [
                 const EmojiHeader(),
                 const SizedBox(height: 16),
-                EmojiDropdown(),
+                const EmojiDropdown(), // make const since it's stateless to the tree creation
               ],
             ),
           ),
@@ -46,6 +39,7 @@ class MyWidget extends StatelessWidget {
     );
   }
 }
+
 
 class EmojiHeader extends StatelessWidget {
   const EmojiHeader({super.key});
