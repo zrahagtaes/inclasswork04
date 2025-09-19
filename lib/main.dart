@@ -131,6 +131,7 @@ class _EmojiDropdownState extends State<EmojiDropdown> {
     );
   }
 }
+// The paint method dynamically draws the emoji face and details
 
 class EmojiPainter extends CustomPainter {
   final String mode; // which emoji style to add
