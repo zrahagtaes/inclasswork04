@@ -1,4 +1,8 @@
-# Emoji Drawing App 🎨
+
+## Notes
+
+
+# Emoji Drawing App
 
 This Flutter app demonstrates how to draw custom emojis using the **CustomPainter** class.  
 Users can choose from different emoji styles and add fun details like sunglasses, tears, blushing, or even a party hat with confetti.
